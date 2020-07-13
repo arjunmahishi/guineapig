@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"github.com/labstack/echo"
 )
 
@@ -23,24 +21,33 @@ func main() {
 	e := echo.New()
 	e.POST("*", handle)
 	e.PUT("*", handle)
-	e.GET("*", func(c echo.Context) error {
-		count++
-		time.Sleep(*delay)
-		fmt.Println("count:", count, "path:", c.Path())
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("*", handle)
+	e.HideBanner = true
+	printBanner()
 	e.Logger.Fatal(e.Start(":" + *port))
 }
 
 func handle(c echo.Context) error {
+	count++
 	var b json.RawMessage
-	if c.Request().Method == http.MethodPost {
+	switch c.Request().Method {
+	case http.MethodPost:
 		if err := c.Bind(&b); err != nil {
 			fmt.Println(err)
 		}
 	}
-	count++
+	fmt.Println("Body: ", string(b), "request-count:", count, "path:", c.Path())
 	time.Sleep(*delay)
-	fmt.Println(string(b), "count:", count, "path:", spew.Sdump(c.Request().Body))
-	return c.String(http.StatusOK, "Hello, World!")
+	return c.String(http.StatusOK, "OK")
+}
+
+func printBanner() {
+	print(string("\033[35m"), `
+ ██████╗ ██╗   ██╗██╗███╗   ██╗███████╗ █████╗ ██████╗ ██╗ ██████╗ 
+██╔════╝ ██║   ██║██║████╗  ██║██╔════╝██╔══██╗██╔══██╗██║██╔════╝ 
+██║  ███╗██║   ██║██║██╔██╗ ██║█████╗  ███████║██████╔╝██║██║  ███╗
+██║   ██║██║   ██║██║██║╚██╗██║██╔══╝  ██╔══██║██╔═══╝ ██║██║   ██║
+╚██████╔╝╚██████╔╝██║██║ ╚████║███████╗██║  ██║██║     ██║╚██████╔╝
+ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝ 
+`, string("\033[0m"))
 }
