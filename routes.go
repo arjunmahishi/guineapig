@@ -9,7 +9,7 @@ import (
 
 func initRoutes(e *echo.Echo) {
 	for path, pathMap := range config {
-		for method, _ := range pathMap {
+		for method := range pathMap {
 			createRoute(e, path, method)
 		}
 	}
