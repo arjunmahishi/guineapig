@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 )
 
 func handler(c echo.Context) error {
-	pathMap, ok := config[c.Path()]
+	pathMap, ok := Config[c.Path()]
 	if !ok {
 		return c.JSON(http.StatusNotFound, json.RawMessage("{}"))
 	}

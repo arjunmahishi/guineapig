@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"encoding/json"
@@ -6,18 +6,18 @@ import (
 	"io/ioutil"
 )
 
-var config map[string]map[string]struct {
+var Config map[string]map[string]struct {
 	StatusCode int             `json:"status_code"`
 	Response   json.RawMessage `json:"response"`
 }
 
-func initConfig() error {
-	if *configFile != "" {
-		raw, err := ioutil.ReadFile(*configFile)
+func InitConfig(configFile string) error {
+	if configFile != "" {
+		raw, err := ioutil.ReadFile(configFile)
 		if err != nil {
 			panic(err)
 		}
-		if err := json.Unmarshal(raw, &config); err != nil {
+		if err := json.Unmarshal(raw, &Config); err != nil {
 			return err
 		}
 		return nil
