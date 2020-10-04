@@ -4,6 +4,8 @@ import (
 	"flag"
 	"log"
 
+	"github.com/labstack/echo/middleware"
+
 	"github.com/labstack/echo"
 )
 
@@ -19,6 +21,9 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "${method} ${uri} ${error}\n",
+	}))
 	initRoutes(e)
 	e.HideBanner = true
 	printBanner()
