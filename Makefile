@@ -3,17 +3,10 @@ ifndef GOBIN
 endif
 
 compile:
-	go build ./cmd/guineapig -o guineapig
-
-dep:
-	go get -d
-
-build:
-	dep
-	compile
+	go build
 
 install:
-	go install ./cmd/guineapig
+	go install
 
 .PHONY:
 	build
