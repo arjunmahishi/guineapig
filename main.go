@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 
-	"github.com/arjunmahishi/guineapig/internal/core"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -16,7 +15,7 @@ var (
 
 func main() {
 	flag.Parse()
-	if err := core.InitConfig(*configFile); err != nil {
+	if err := InitConfig(*configFile); err != nil {
 		log.Fatalln(err.Error(), "run with '-help' to get help")
 	}
 
@@ -24,7 +23,8 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "${method} ${uri} ${error}\n",
 	}))
-	core.InitRoutes(e)
+
+	InitRoutes(e)
 	e.HideBanner = true
 	printBanner()
 	e.Logger.Fatal(e.Start(":" + *port))

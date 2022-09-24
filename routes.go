@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-func initRoutes(e *echo.Echo) {
-	for path, pathMap := range config {
+func InitRoutes(e *echo.Echo) {
+	for path, pathMap := range Config {
 		for method := range pathMap {
 			createRoute(e, path, method)
 		}
